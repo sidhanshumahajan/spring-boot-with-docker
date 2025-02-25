@@ -5,7 +5,7 @@ pipeline {
     agent { label "vinod" }
     stages { 
         
-        stage("hello11") {
+        stage("hello") {
           steps {
             script {
               hello()
@@ -72,7 +72,7 @@ pipeline {
         }
         stage("Deploy") {
            steps {
-               echo "Deploying Code...."
+               echo "Deploying Code to docker..."
                sh "docker run -d -p 8081:8080  my-spring-app:${formattedDate}"
            }
         }
