@@ -1,6 +1,5 @@
 def formattedDate = ""
 @Library("shared") _
-
 pipeline {
     agent { label "vinod" }
     stages { 
