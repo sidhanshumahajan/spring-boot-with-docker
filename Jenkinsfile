@@ -5,7 +5,7 @@ pipeline {
     agent { label "vinod" }
     stages { 
         
-        stage("hello") {
+        stage("hello11") {
           steps {
             script {
               hello()
