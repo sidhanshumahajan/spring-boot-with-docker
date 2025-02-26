@@ -4,7 +4,7 @@ pipeline {
     agent { label "vinod" }
     stages { 
         
-        stage("helloJob") {
+        stage("Hello") {
           steps {
             script {
               hello()
@@ -12,7 +12,7 @@ pipeline {
           }  
         }
         
-        stage("Checkout Job") {
+        stage("Checkout Code") {
            steps {
                script {
                    clone("https://github.com/sidhanshumahajan/spring-boot-with-docker", "main")
@@ -20,7 +20,7 @@ pipeline {
            }
         }
         
-        stage("Build") {
+        stage("Build Code") {
            steps {
                echo "Building the code...."
                sh 'mvn -B -DskipTests clean package' 
@@ -69,7 +69,7 @@ pipeline {
                }
            }
         }
-        stage("Deploy") {
+        stage("Deploy Code") {
            steps {
                echo "Deploying Code to docker..."
                sh "docker run -d -p 8081:8080  my-spring-app:${formattedDate}"
