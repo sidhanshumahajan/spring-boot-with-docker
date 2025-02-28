@@ -40,4 +40,4 @@ spec:
     - port: 8080
       targetPort: 8080
       protocol: TCP
-      nodePort: 33001
+      nodePort: 31100
