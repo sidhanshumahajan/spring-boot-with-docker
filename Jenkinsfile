@@ -3,7 +3,8 @@ def formattedDate = ""
 pipeline {
     agent { label "vinod" }
     stages { 
-        stage ("Initialization...") {
+        
+        stage("Initialization...") {
             steps {
               formattedDate = new Date().format("yyyy-MM-dd_HH-mm-ss")
             }
@@ -15,13 +16,13 @@ pipeline {
                    clone("https://github.com/sidhanshumahajan/spring-boot-with-docker", "main")
                }
            }
-        }
-        post {
-            success{
-               echo "====++++Code Checkout successful++++===="
-            }
-            failure{
-               echo "====++++Code Checkout failed++++===="
+           post {
+               success{
+                   echo "====++++Code Checkout successful++++===="
+               }
+               failure{
+                   echo "====++++Code Checkout failed++++===="
+                }
             }
         }
         
