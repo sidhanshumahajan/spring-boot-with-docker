@@ -130,14 +130,14 @@ pipeline {
             }
         }
         
-        stage("Deploy Code") {
-           steps {
-               echo "Deploying Code to docker..."
-               script {
-                   docker_run("${params.DOCKER_HUB_USERNAME}", "${params.PROJECT_NAME}", formattedDate)
-               }
-           }
-        }
+        // stage("Deploy Code") {
+        //    steps {
+        //        echo "Deploying Code to docker..."
+        //        script {
+        //            docker_run("${params.DOCKER_HUB_USERNAME}", "${params.PROJECT_NAME}", formattedDate)
+        //        }
+        //    }
+        // }
     }
     post {
         success {
