@@ -15,7 +15,7 @@ pipeline {
                echo "Building the code...."
                sh 'mvn -B -DskipTests clean package' 
                script {
-                 docker_build("8281", "my-spring-app", "latest")
+                 docker_build("80281", "my-spring-app", "latest")
                }
            } 
            post {
@@ -32,7 +32,7 @@ pipeline {
             steps {
                  echo "====++++Pushing DockerImage To DockerHub++++===="
                  script {
-                   docker_push("8281", "my-spring-app", "latest")  
+                   docker_push("80281", "my-spring-app", "latest")  
                  } 
             }
         }
@@ -57,7 +57,7 @@ pipeline {
         stage("Deploy Code") {
            steps {
                echo "Deploying Code to docker..."
-               sh "docker run -d -p 8081:8080  my-spring-app:latest"
+               sh "docker run -d -p 8081:8080  80281/my-spring-app:latest"
            }
         }
     }
