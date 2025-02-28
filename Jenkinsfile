@@ -8,7 +8,7 @@ pipeline {
     }
 
     parameters {
-        string(name: 'PROJECT_NAME', defaultValue: '', description: 'Setting name of the application'),
+        string(name: 'PROJECT_NAME', defaultValue: '', description: 'Setting name of the application')
         string(name: 'DOCKER_HUB_USERNAME', defaultValue: '', description: 'Setting docker hub user name')
     }
     
@@ -143,7 +143,7 @@ pipeline {
         success {
             archiveArtifacts artifacts: '.*xml', followSymlinks :false
             build job: "Spring-App-CD", parameters: [
-                string(name: 'PROJECT_NAME', value: "${params.PROJECT_NAME}")
+                string(name: 'PROJECT_NAME', value: "${params.PROJECT_NAME}"),
                 string(name: 'DOCKER_HUB_USERNAME', value: "${params.DOCKER_HUB_USERNAME}")
             ]
         }
