@@ -17,14 +17,14 @@ spec:
       containers:
       - name: backend
         image: 80281/my-spring-app:2025-02-28_21-42-34
-        imagePullPolicy: IfNotPresent
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-          limits:
-            cpu: 300m
-            memory: 300Mi
+        # imagePullPolicy: IfNotPresent
+        # resources:
+        #   requests:
+        #     cpu: 100m
+        #     memory: 100Mi
+        #   limits:
+        #     cpu: 300m
+        #     memory: 300Mi
         ports:
         - containerPort:   8080
 ---
