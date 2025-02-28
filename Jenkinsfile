@@ -13,7 +13,7 @@ pipeline {
     }
     
     stages { 
-       stage("Validating Parameters") {
+       steps("Validating Parameters") {
            steps {
                script {
                    if (params.PROJECT_NAME == '' || params.DOCKER_HUB_USERNAME == '') {
@@ -23,9 +23,11 @@ pipeline {
            }
        }
        stage("Workspace cleanup") {
-            script {
-                cleanWs()
-            }
+           steps {
+              script {
+                  cleanWs()
+              }
+           }
        }
        stage("Initialization...") {
             steps {
