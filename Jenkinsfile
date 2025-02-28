@@ -6,7 +6,9 @@ pipeline {
         
         stage("Initialization...") {
             steps {
-              formattedDate = new Date().format("yyyy-MM-dd_HH-mm-ss")
+              script {
+                 formattedDate = new Date().format("yyyy-MM-dd_HH-mm-ss")
+              }
             }
         }
         
