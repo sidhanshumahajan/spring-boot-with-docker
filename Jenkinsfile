@@ -51,6 +51,38 @@ pipeline {
                 }
             }
         }
+        stage("Build Code") {
+           steps {
+               echo "Building the code...."
+               sh 'mvn -B -DskipTests clean package' 
+           } 
+           post {
+               success{
+                   echo "====++++Build successful++++===="
+               }
+               failure{
+                   echo "====++++Build failed++++===="
+               }
+           } 
+        }
+        stage("Test") {
+           steps {
+               sh 'mvn test'
+               echo "Running the Test cases...."
+           }
+           post {
+               always{
+                  junit "target/surefire-reports/*.xml"
+               } 
+               success{
+                   echo "====++++Test Cases Executed successful++++===="
+               }
+               failure{
+                   echo "====++++Test Cases Execution failed++++===="
+               }
+           }
+        }
+        
         stage("Trivy: FileSystem scan") {
             steps {
                 script {
@@ -72,46 +104,12 @@ pipeline {
                 }
             }
         }
-
         stage("SonarQube: Quality Gates") {
             steps {
                 script {
                     sonarqube_code_quality()
                 }
             }
-        }
-        
-        stage("Build Code") {
-           steps {
-               echo "Building the code...."
-               sh 'mvn -B -DskipTests clean package' 
-           } 
-           post {
-               success{
-                   echo "====++++Build successful++++===="
-               }
-               failure{
-                   echo "====++++Build failed++++===="
-               }
-           } 
-        }
-
-        stage("Test") {
-           steps {
-               sh 'mvn test'
-               echo "Running the Test cases...."
-           }
-           post {
-               always{
-                  junit "target/surefire-reports/*.xml"
-               } 
-               success{
-                   echo "====++++Test Cases Executed successful++++===="
-               }
-               failure{
-                   echo "====++++Test Cases Execution failed++++===="
-               }
-           }
         }
 
         stage("Docker: Build Images") {
@@ -131,15 +129,18 @@ pipeline {
                  } 
             }
         }
-        
-        // stage("Deploy Code") {
-        //    steps {
-        //        echo "Deploying Code to docker..."
-        //        script {
-        //            docker_run("${params.DOCKER_HUB_USERNAME}", "${params.PROJECT_NAME}", formattedDate)
-        //        }
-        //    }
-        // }
+
+        stage("Update: Kuberenetes Manifest") {
+            steps {
+                script {
+                    dir('kubernetes') {
+                        sh """
+                            sed -i -e s/${params.PROJECT_NAME}.*/${params.PROJECT_NAME}:${formattedDate}/g deployment.yaml
+                        """
+                    }
+                }
+            }
+        }
     }
     post {
         success {
