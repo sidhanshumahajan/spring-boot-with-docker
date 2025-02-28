@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-spring-app
+  name: backend
   labels:
-    app: my-spring-app
+    app: backend
 spec:
   selector:
     matchLabels:
-      app: my-spring-app
+      app: backend
   replicas: 1
   template:
     metadata:
       labels:
-        app: my-spring-app
+        app: backend
     spec:
       containers:
-      - name: my-spring-app
+      - name: backend
         image: 80281/my-spring-app:latest
         imagePullPolicy: IfNotPresent
         resources:
@@ -27,5 +27,17 @@ spec:
             memory: 300Mi
         ports:
         - containerPort: 8085
-          name: my-spring-app
-      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: NodePort
+  selector:
+    app: backend
+  ports:
+    - port: 8085
+      targetPort: 8085
+      protocol: TCP
+      nodePort: 8089
