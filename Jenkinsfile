@@ -1,11 +1,10 @@
 def formattedDate = ""
 @Library("shared") _
-
 pipeline {
     agent { label "vinod" }
     stages { 
         
-        stage("hello") {
+        stage("Hello") {
           steps {
             script {
               hello()
@@ -21,7 +20,7 @@ pipeline {
            }
         }
         
-        stage("Build") {
+        stage("Build Code") {
            steps {
                echo "Building the code...."
                sh 'mvn -B -DskipTests clean package' 
@@ -70,9 +69,9 @@ pipeline {
                }
            }
         }
-        stage("Deploy") {
+        stage("Deploy Code") {
            steps {
-               echo "Deploying Code...."
+               echo "Deploying Code to docker..."
                sh "docker run -d -p 8081:8080  my-spring-app:${formattedDate}"
            }
         }
