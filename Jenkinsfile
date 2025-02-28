@@ -141,6 +141,27 @@ pipeline {
                 }
             }
         }
+        stage("Git: Code Update and push to GitHub") {
+            steps {
+                script {
+                  withCredentials([gitUsernamePassword(credentials: 'gitHubCred', gitToolName: 'Default')]) {
+                       sh """
+                           echo "Checking Repository status"
+                            git status
+
+                            echo "Adding new changes in git"
+                            git add .
+
+                            echo "Commiting changes: "
+                            git commit -m "Updated environment variables"
+  
+                            echo "Pushing changes to gitHub"
+                            git push https://github.com/sidhanshumahajan/spring-boot-with-docker.git main
+                        """
+                    }
+                }
+            }
+        }
     }
     post {
         success {
