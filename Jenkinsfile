@@ -133,7 +133,7 @@ pipeline {
         stage("Update: Kuberenetes Manifest") {
             steps {
                 script {
-                    dir('kubernetes') {
+                    dir('kuberenetes') {
                         sh """
                             sed -i -e s/${params.PROJECT_NAME}.*/${params.PROJECT_NAME}:${formattedDate}/g deployment.yaml
                         """
