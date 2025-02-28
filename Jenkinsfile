@@ -7,10 +7,12 @@ pipeline {
         SONAR_HOME = "Sonar"
     }
 
-    parameters {
-        string(name: 'PROJECT_NAME', defaultValue: '', description: 'Setting name of the application')
-        string(name: 'DOCKER_HUB_USERNAME', defaultValue: '', description: 'Setting docker hub user name')
-    }
+    properties([
+       parameters([
+          string(name: 'PROJECT_NAME', defaultValue: '', description: 'Setting name of the application')
+          string(name: 'DOCKER_HUB_USERNAME', defaultValue: '', description: 'Setting docker hub user name')
+       ])
+    ])
     
     stages { 
        stage("Validating Parameters") {
