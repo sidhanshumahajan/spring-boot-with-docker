@@ -1,7 +1,14 @@
+def formattedDate = ""
 @Library("shared") _
 pipeline {
     agent { label "vinod" }
     stages { 
+        stage ("Initialization...") {
+            steps {
+              formattedDate = new Date().format("yyyy-MM-dd_HH-mm-ss")
+            }
+        }
+        
         stage("Code Checkout") {
            steps {
                script {
@@ -9,13 +16,21 @@ pipeline {
                }
            }
         }
+        post {
+            success{
+               echo "====++++Code Checkout successful++++===="
+            }
+            failure{
+               echo "====++++Code Checkout failed++++===="
+            }
+        }
         
         stage("Build Code") {
            steps {
                echo "Building the code...."
                sh 'mvn -B -DskipTests clean package' 
                script {
-                 docker_build("80281", "my-spring-app", "latest")
+                 docker_build("80281", "my-spring-app", formattedDate)
                }
            } 
            post {
@@ -32,7 +47,7 @@ pipeline {
             steps {
                  echo "====++++Pushing DockerImage To DockerHub++++===="
                  script {
-                   docker_push("80281", "my-spring-app", "latest")  
+                   docker_push("80281", "my-spring-app", formattedDate)  
                  } 
             }
         }
@@ -57,7 +72,9 @@ pipeline {
         stage("Deploy Code") {
            steps {
                echo "Deploying Code to docker..."
-               sh "docker run -d -p 8081:8080  80281/my-spring-app:latest"
+               script {
+                   docker_run("80281", "my-spring-app", formattedDate)
+               }
            }
         }
     }
