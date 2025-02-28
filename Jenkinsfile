@@ -1,18 +1,8 @@
-def formattedDate = ""
 @Library("shared") _
 pipeline {
     agent { label "vinod" }
     stages { 
-        
-        stage("Hello") {
-          steps {
-            script {
-              hello()
-            }
-          }  
-        }
-        
-        stage("Checkout Code") {
+        stage("Code Checkout") {
            steps {
                script {
                    clone("https://github.com/sidhanshumahajan/spring-boot-with-docker", "main")
@@ -25,33 +15,28 @@ pipeline {
                echo "Building the code...."
                sh 'mvn -B -DskipTests clean package' 
                script {
-                 formattedDate = new Date().format("yyyy-MM-dd_HH-mm-ss")
-                 docker_build("my-spring-app", formattedDate)
+                 docker_build("my-spring-app", "latest")
                }
            } 
            post {
                success{
-               echo "====++++Build successful++++===="
-               // emailext(
-               //          body: '$BUILD_URL has result $BUILD_STATUS',
-               //          subject: 'Status of pipeline: $JOB_NAME',
-               //          to: 'mahajansidhanshu36@gmail.com'
-               //      )
-               echo "====++++Pushing DockerImage To DockerHub++++===="
-                withCredentials([usernamePassword(
-                     credentialsId: 'dockerHubCred', 
-                     passwordVariable: 'dockerHubPwd', 
-                     usernameVariable: 'dockerHubUserName')]) {
-                  sh "docker login -u ${env.dockerHubUserName}  -p ${env.dockerHubPwd}"
-                  sh "docker image tag my-spring-app:${formattedDate} ${env.dockerHubUserName}/my-spring-app:${formattedDate}"
-                  sh "docker push ${env.dockerHubUserName}/my-spring-app:${formattedDate}"
-                }
+                   echo "====++++Build successful++++===="
                }
                failure{
                    echo "====++++Build failed++++===="
                }
            }
         }
+        
+        stage("Docker: Push to DockerHub") {
+            steps {
+                 echo "====++++Pushing DockerImage To DockerHub++++===="
+                 script {
+                   docker_push("8281", "my-spring-app", "latest")  
+                 } 
+            }
+        }
+        
         stage("Test") {
            steps {
             sh 'mvn test'
@@ -72,7 +57,7 @@ pipeline {
         stage("Deploy Code") {
            steps {
                echo "Deploying Code to docker..."
-               sh "docker run -d -p 8081:8080  my-spring-app:${formattedDate}"
+               sh "docker run -d -p 8081:8080  my-spring-app:latest"
            }
         }
     }
