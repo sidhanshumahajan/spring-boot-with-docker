@@ -15,7 +15,7 @@ pipeline {
                echo "Building the code...."
                sh 'mvn -B -DskipTests clean package' 
                script {
-                 docker_build("my-spring-app", "latest")
+                 docker_build("8281", "my-spring-app", "latest")
                }
            } 
            post {
