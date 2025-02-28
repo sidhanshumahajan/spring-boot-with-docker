@@ -13,7 +13,7 @@ pipeline {
     }
     
     stages { 
-       steps("Validating Parameters") {
+       stage("Validating Parameters") {
            steps {
                script {
                    if (params.PROJECT_NAME == '' || params.DOCKER_HUB_USERNAME == '') {
