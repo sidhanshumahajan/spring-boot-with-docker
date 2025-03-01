@@ -150,7 +150,7 @@ pipeline {
             mimeType: 'text/html'
         }
         failure {
-             emailext attchlog:true,
+             emailext attachLog:true,
              from: 'mahajansidhanshu36@gamil.com',
              body: 'Build Failed',
              subject: 'Build Failed for spring-boot-app',
