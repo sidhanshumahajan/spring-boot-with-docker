@@ -46,7 +46,7 @@ pipeline {
                 script {
                     dir('kuberenetes') {
                         sh """
-                            sed -i -e s/${params.PROJECT_NAME}.*/${params.PROJECT_NAME}:${params.TAG}/g deployement.yaml
+                            sed -i -e s/${params.PROJECT_NAME}.*/${params.PROJECT_NAME}:${params.TAG}/g deployment.yaml
                         """
                     }
                 }
