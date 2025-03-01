@@ -73,4 +73,18 @@ pipeline {
                 }
             }
       }
+    post {
+        success {
+            emailext body: 'Build Passed for spring-boot-app',
+                     recipientProviders: [developers(), requestor()],
+                     subject: 'Test Subject',
+                     to: 'mahajansidhanshu36@gamil.com' 
+        }
+        failure {
+            emailext body: 'Build Failed',
+                     recipientProviders: [culprits(), requestor()],
+                     subject: 'Build Failed for spring-boot-app',
+                     to: 'mahajansidhanshu36@gamil.com' 
+        }
+    }
 }
