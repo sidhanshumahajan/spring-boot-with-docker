@@ -75,8 +75,8 @@ pipeline {
       }
     post {
         success {
-            emailext attachLog: true,
-            from: 'mahajansidhanshu36@gmail.com',
+            // emailext attachLog: true,
+            emailext: from: 'mahajansidhanshu36@gmail.com',
             subject: "Build '${currentBuild.result}' for spring-boot-app",
             body: """
                      <!DOCTYPE html>
