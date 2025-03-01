@@ -32,6 +32,15 @@ pipeline {
                 }
             }
         }
+
+        stage("Verify: Docker Image Tags") {
+            steps {
+                    echo "PROJECT_NAME: ${params.PROJECT_NAME}"
+                    echo "PROJECT_NAME: ${params.DOCKER_HUB_USERNAME}"
+                    echo "PROJECT_NAME: ${params.TAG}"
+            }
+        }    
+        
         stage("Update: Kuberenetes Manifest") {
             steps {
                 script {
@@ -43,6 +52,7 @@ pipeline {
                 }
             }
         }
+        
         stage("Git: Code Update and push to GitHub") {
             steps {
                   withCredentials([gitUsernamePassword(credentialsId: 'gitHubCred', gitToolName: 'Default')]) {
