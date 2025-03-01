@@ -1,1 +1,65 @@
+@Library("shared") _
+pipeline {
+    agent any
 
+    parameters {
+        string(name: 'PROJECT_NAME', defaultValue: '', description: 'Setting name of the application')
+        string(name: 'DOCKER_HUB_USERNAME', defaultValue: '', description: 'Setting docker hub user name')
+        string(name: 'TAG', defaultValue: '', description: 'Backend Docker tag of the image built by the CI job')
+    }
+    
+    stages { 
+       stage("Workspace cleanup") {
+           steps {
+              script {
+                  cleanWs()
+              }
+           }
+       }
+        stage("Git: Code Checkout") {
+           steps {
+               script {
+                   clone("https://github.com/sidhanshumahajan/spring-boot-with-docker", "main")
+               }
+           }
+           post {
+               success{
+                   echo "====++++Code Checkout successful++++===="
+               }
+               failure{
+                   echo "====++++Code Checkout failed++++===="
+                }
+            }
+        }
+        stage("Update: Kuberenetes Manifest") {
+            steps {
+                script {
+                    dir('kuberenetes') {
+                        sh """
+                            sed -i -e s/${params.PROJECT_NAME}.*/${params.PROJECT_NAME}:${params.TAG}/g deployment.yaml
+                        """
+                    }
+                }
+            }
+        }
+        stage("Git: Code Update and push to GitHub") {
+            steps {
+                  withCredentials([gitUsernamePassword(credentialsId: 'gitHubCred', gitToolName: 'Default')]) {
+                       sh """
+                           echo "Checking Repository status"
+                            git status
+
+                            echo "Adding new changes in git"
+                            git add .
+
+                            echo "Commiting changes: "
+                            git commit -m "Updated environment variables"
+  
+                            echo "Pushing changes to gitHub"
+                            git push https://github.com/sidhanshumahajan/spring-boot-with-docker.git main
+                        """
+                    }
+                }
+            }
+      }
+}
