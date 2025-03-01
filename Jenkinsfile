@@ -1,4 +1,4 @@
-def formattedDate = ""
+// def formattedDate = ""
 @Library("shared") _
 pipeline {
     agent { label "vinod" }
@@ -10,14 +10,15 @@ pipeline {
     parameters {
         string(name: 'PROJECT_NAME', defaultValue: '', description: 'Setting name of the application')
         string(name: 'DOCKER_HUB_USERNAME', defaultValue: '', description: 'Setting docker hub user name')
+        string(name: 'TAG', defaultValue: '', description: 'Backend Docker tag of the image built by the CI job')
     }
     
     stages { 
        stage("Validating Parameters") {
            steps {
                script {
-                   if (params.PROJECT_NAME == '' || params.DOCKER_HUB_USERNAME == '') {
-                      error("PROJECT_NAME and DOCKER_HUB_USERNAME must be provided.") 
+                   if (params.PROJECT_NAME == '' || params.DOCKER_HUB_USERNAME == '' || params.TAG == '') {
+                      error("PROJECT_NAME and DOCKER_HUB_USERNAME and TAG must be provided.") 
                    }
                }
            }
@@ -29,13 +30,13 @@ pipeline {
               }
            }
        }
-       stage("Initialization...") {
-            steps {
-              script {
-                 formattedDate = new Date().format("yyyy-MM-dd_HH-mm-ss")
-              }
-            }
-        }
+       // stage("Initialization...") {
+       //      steps {
+       //        script {
+       //           formattedDate = new Date().format("yyyy-MM-dd_HH-mm-ss")
+       //        }
+       //      }
+       //  }
         stage("Git: Code Checkout") {
            steps {
                script {
@@ -116,7 +117,7 @@ pipeline {
             steps {
                  echo "====++++Build Docker Image++++===="
                  script {
-                    docker_build("${params.DOCKER_HUB_USERNAME}", "${params.PROJECT_NAME}", formattedDate)
+                    docker_build("${params.DOCKER_HUB_USERNAME}", "${params.PROJECT_NAME}", "${params.TAG}")
                }
             }
         }
@@ -125,7 +126,7 @@ pipeline {
             steps {
                  echo "====++++Pushing DockerImage To DockerHub++++===="
                  script {
-                   docker_push("${params.DOCKER_HUB_USERNAME}", "${params.PROJECT_NAME}", formattedDate)  
+                   docker_push("${params.DOCKER_HUB_USERNAME}", "${params.PROJECT_NAME}", "${params.TAG}")  
                  } 
             }
         }
@@ -135,7 +136,7 @@ pipeline {
                 script {
                     dir('kuberenetes') {
                         sh """
-                            sed -i -e s/${params.PROJECT_NAME}.*/${params.PROJECT_NAME}:${formattedDate}/g deployment.yaml
+                            sed -i -e s/${params.PROJECT_NAME}.*/${params.PROJECT_NAME}:${params.TAG}/g deployment.yaml
                         """
                     }
                 }
@@ -167,6 +168,7 @@ pipeline {
             build job: "Spring-App-CD", parameters: [
                 string(name: 'PROJECT_NAME', value: "${params.PROJECT_NAME}"),
                 string(name: 'DOCKER_HUB_USERNAME', value: "${params.DOCKER_HUB_USERNAME}")
+                string(name: 'TAG', value: "${params.TAG}"
             ]
         }
     }
