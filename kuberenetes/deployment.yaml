@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: 80281/my-spring-app:v1.1
+        image: 80281/my-spring-app:v1.6
         # imagePullPolicy: IfNotPresent
         # resources:
         #   requests:
