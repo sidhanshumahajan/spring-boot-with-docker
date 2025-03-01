@@ -75,14 +75,82 @@ pipeline {
       }
     post {
         success {
-            emailext body: 'Build Passed for spring-boot-app',
-                     recipientProviders: [developers(), requestor()],
-                     subject: 'Test Subject',
+            emailext from: mahajansidhanshu36@gmail.com,
+                     body: """
+                     <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenkins Build Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: #0073e6;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            color: white;
+            background: #28a745;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Jenkins Build Notification</h2>
+        </div>
+        <div class="content">
+            <p>Hello,</p>
+            <p>The Jenkins build <strong>${env.BUILD_NUMBER}</strong> for job <strong>${env.JOB_NAME}</strong> has been completed.</p>
+            <p>You can view the build details at:</p>
+            <p><a href="${env.BUILD_URL}" class="button">View Build</a></p>
+            <p>Thank you,</p>
+            <p>Jenkins Automation</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 Jenkins CI/CD System</p>
+        </div>
+    </div>
+</body>
+</html>
+""",
+                     subject: "Build '${currentBuild.result}' for spring-boot-app",
+                     mimeType: 'text/html'
                      to: 'mahajansidhanshu36@gamil.com' 
         }
         failure {
             emailext body: 'Build Failed',
-                     recipientProviders: [culprits(), requestor()],
+                     from: 'mahajansidhanshu36@gamil.com',
                      subject: 'Build Failed for spring-boot-app',
                      to: 'mahajansidhanshu36@gamil.com' 
         }
