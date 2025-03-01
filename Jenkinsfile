@@ -130,38 +130,7 @@ pipeline {
                  } 
             }
         }
-
-        stage("Update: Kuberenetes Manifest") {
-            steps {
-                script {
-                    dir('kuberenetes') {
-                        sh """
-                            sed -i -e s/${params.PROJECT_NAME}.*/${params.PROJECT_NAME}:${params.TAG}/g deployment.yaml
-                        """
-                    }
-                }
-            }
-        }
-        stage("Git: Code Update and push to GitHub") {
-            steps {
-                  withCredentials([gitUsernamePassword(credentialsId: 'gitHubCred', gitToolName: 'Default')]) {
-                       sh """
-                           echo "Checking Repository status"
-                            git status
-
-                            echo "Adding new changes in git"
-                            git add .
-
-                            echo "Commiting changes: "
-                            git commit -m "Updated environment variables"
-  
-                            echo "Pushing changes to gitHub"
-                            git push https://github.com/sidhanshumahajan/spring-boot-with-docker.git main
-                        """
-                    }
-                }
-            }
-        }
+    }
     post {
         success {
             archiveArtifacts artifacts: '**/*.xml', followSymlinks: false, allowEmptyArchive: true
