@@ -164,7 +164,7 @@ pipeline {
         }
     post {
         success {
-            archiveArtifacts artifacts: '.*xml', followSymlinks :false
+            archiveArtifacts artifacts: '**/*.xml', followSymlinks: false, allowEmptyArchive: true
             build job: "Spring-App-CD", parameters: [
                 string(name: 'PROJECT_NAME', value: "${params.PROJECT_NAME}"),
                 string(name: 'DOCKER_HUB_USERNAME', value: "${params.DOCKER_HUB_USERNAME}"),
