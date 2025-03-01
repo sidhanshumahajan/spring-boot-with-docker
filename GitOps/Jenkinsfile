@@ -75,8 +75,10 @@ pipeline {
       }
     post {
         success {
-            emailext from: 'mahajansidhanshu36@gmail.com',
-                     body: """
+            emailext attachLog: true,
+            from: 'mahajansidhanshu36@gmail.com',
+            subject: "Build '${currentBuild.result}' for spring-boot-app",
+            body: """
                      <!DOCTYPE html>
 <html>
 <head>
@@ -144,9 +146,8 @@ pipeline {
 </body>
 </html>
 """,
-                     subject: "Build '${currentBuild.result}' for spring-boot-app",
-                     mimeType: 'text/html'
-                     to: 'mahajansidhanshu36@gamil.com' 
+            to: 'mahajansidhanshu36@gamil.com', 
+            mimeType: 'text/html'
         }
         failure {
             emailext body: 'Build Failed',
