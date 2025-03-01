@@ -105,13 +105,13 @@ pipeline {
                 }
             }
         }
-        // stage("SonarQube: Quality Gates") {
-        //     steps {
-        //         script {
-        //             sonarqube_code_quality()
-        //         }
-        //     }
-        // }
+        stage("SonarQube: Quality Gates") {
+            steps {
+                script {
+                    sonarqube_code_quality()
+                }
+            }
+        }
 
         stage("Docker: Build Images") {
             steps {
@@ -162,14 +162,14 @@ pipeline {
                 }
             }
         }
-    post {
-        success {
-            archiveArtifacts artifacts: '.*xml', followSymlinks :false
-            build job: "Spring-App-CD", parameters: [
-                string(name: 'PROJECT_NAME', value: "${params.PROJECT_NAME}"),
-                string(name: 'DOCKER_HUB_USERNAME', value: "${params.DOCKER_HUB_USERNAME}"),
-                string(name: 'TAG', value: "${params.TAG}")
-            ]
-        }
-    }
+    // post {
+    //     success {
+    //         archiveArtifacts artifacts: '.*xml', followSymlinks :false
+    //         build job: "Spring-App-CD", parameters: [
+    //             string(name: 'PROJECT_NAME', value: "${params.PROJECT_NAME}"),
+    //             string(name: 'DOCKER_HUB_USERNAME', value: "${params.DOCKER_HUB_USERNAME}"),
+    //             string(name: 'TAG', value: "${params.TAG}")
+    //         ]
+    //     }
+    // }
 }
