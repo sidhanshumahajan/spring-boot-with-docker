@@ -151,7 +151,7 @@ pipeline {
         }
         failure {
              emailext attachLog:true,
-             from: 'mahajansidhanshu36@gamil.com',
+             from: 'mahajansidhanshu36@gmail.com',
              subject: "Build Failed for spring-boot-app",
              body: """
               <!DOCTYPE html>
@@ -167,7 +167,7 @@ pipeline {
             </body>
             </html>     
              """,
-             to: 'mahajansidhanshu36@gamil.com',
+             to: 'mahajansidhanshu36@gmail.com',
              mimeType: 'text/html'
         }
     }
