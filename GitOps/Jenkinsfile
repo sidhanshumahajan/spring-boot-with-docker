@@ -152,8 +152,21 @@ pipeline {
         failure {
              emailext attachLog:true,
              from: 'mahajansidhanshu36@gamil.com',
-             body: 'Build Failed',
-             subject: 'Build Failed for spring-boot-app',
+             subject: "Build Failed for spring-boot-app",
+             body: """
+              <!DOCTYPE html>
+            <html>
+            <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Jenkins Build Notification</title>
+            <body>
+            <h2> 
+            <p>The Jenkins build <strong>${env.BUILD_NUMBER}</strong> for job <strong>${env.JOB_NAME}</strong> has been failed.</p>
+            </h2>
+            </body>
+            </html>     
+             """,
              to: 'mahajansidhanshu36@gamil.com',
              mimeType: 'text/html'
         }
