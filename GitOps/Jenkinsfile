@@ -75,7 +75,7 @@ pipeline {
       }
     post {
         success {
-            emailext from: mahajansidhanshu36@gmail.com,
+            emailext from: 'mahajansidhanshu36@gmail.com',
                      body: """
                      <!DOCTYPE html>
 <html>
